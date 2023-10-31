@@ -9,8 +9,8 @@ typedef struct {
 	int steps;
 } FITNESS_DATA;
 
-// Define any additional variables here
-#define MAX_RECORDS 1000
+// Define variable which reads file upto 1000 lines
+const int MAX_RECORDS = 1000;
 
 
 // This is your helper function. Do not change it in any way.
@@ -57,12 +57,16 @@ int main() {
     char line[100];
     int recordCount = 0;
 
+    // while loop which counts and stores values from the file by tokeniseRecord function
     while (fgets(line, sizeof(line), file)) {
-        char date[11], time[6], steps[4];
+        // formats each value to its designated string
+        char date[11], time[6], steps[11];
         tokeniseRecord(line, ",", date, time, steps);
+        // copies data to its destination. date, time and steps
         strcpy(data[recordCount].date, date);
         strcpy(data[recordCount].time, time);
         data[recordCount].steps = atoi(steps);
+
         recordCount++;
     }
 
