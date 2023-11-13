@@ -72,7 +72,7 @@ int main() {
     int minIndex = findFewestSteps(data, recordCount);
     int maxIndex = findLargestSteps(data, recordCount);
     int mean = meanSteps(data, recordCount);
-    Longestperiod(data, recordCount);
+    // Longestperiod(data, recordCount);
      
      char choice;
     printf("Menu:\n1. Option A\n2. Option B\n3. Option C\n4. Option D\n5. Option E\n6. Option F\n7. Option Q\nEnter your choice: ");
