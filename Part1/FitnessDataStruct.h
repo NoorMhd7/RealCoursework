@@ -65,7 +65,7 @@ int meanSteps(const FITNESS_DATA *data, int size) {
     return mean;
 }
 
-int Longestperiod(const FITNESS_DATA *data, int size) {
+void Longestperiod(const FITNESS_DATA *data, int size) {
     int maxLength = 0;
     int startIndex = 0;
     int currentLength = 0;
@@ -91,7 +91,7 @@ int Longestperiod(const FITNESS_DATA *data, int size) {
     }
 
     // Output the result
-         printf("Longest continuous period above 500 steps:\nLongest period start: %s %s\nLongest period end: %s %s\n",
+         printf("Longest period start: %s %s\nLongest period end: %s %s\n",
             data[startIndex].date, data[startIndex].time, data[startIndex + maxLength - 1].date, data[startIndex + maxLength - 1].time);
       
      

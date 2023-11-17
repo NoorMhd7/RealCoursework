@@ -46,34 +46,19 @@ int main() {
     
     
 
-    // Open the CSV file for reading
-    // char filename[] = "FitnessData_2023.csv";
-    // FILE *file = fopen(filename, "r");
-    // if (file == NULL) {
-    //     perror("");
-    //     return 1;
-    // }
+    
 
     // Read data from the file
     char line[100];
     int recordCount = 0;
 
-    // while loop which counts and stores values from the file by tokeniseRecord function
-    // while (fgets(line, sizeof(line), file)) {
-    //     // formats each value to its designated string
-    //     char date[11], time[6], steps[11];
-    //     tokeniseRecord(line, ",", date, time, steps);
-    //     // copies data to its destination. date, time and steps
-    //     strcpy(data[recordCount].date, date);
-    //     strcpy(data[recordCount].time, time);
-    //     data[recordCount].steps = atoi(steps);
+    
 
-       // recordCount++;
-    // }       
-    // int minIndex = findFewestSteps(data, recordCount);
-    // int maxIndex = findLargestSteps(data, recordCount);
-    // int mean = meanSteps(data, recordCount);
-    // Longestperiod(data, recordCount);
+       
+     int minIndex;
+     int maxIndex;
+     int mean;
+    
     while (1) {      
         char choice;
         printf("Menu Options:\n");
@@ -81,7 +66,7 @@ int main() {
         printf("B: Display the total number of records in the file\n");
         printf("C: Find the date and time of the timeslot with the fewest steps\n");
         printf("D: Find the date and time of the timeslot with the largest number of steps\n");
-        printf("E: Find the mean step count of all the records in the file");
+        printf("E: Find the mean step count of all the records in the file\n");
         printf("F: Find the longest continuous period where the step count is above 500 steps\n");
         printf("Q: Quit\n");
         
@@ -89,45 +74,52 @@ int main() {
         while (getchar() != '\n');
         switch (choice) {
             case 'A':
-            printf("Please enter the file name: ");
+            printf("Input filename: ");
             fgets(line, sizeof(line), stdin);
             sscanf(line, " %s ", filename);
             FILE *input = fopen(filename, "r");
             if (!input)
             {
-                printf("Error: File could not be opened\n");
-                return 0;  }
+                printf("Error: Could not find or open the file.\n");
+                return 1;  }
             else {
-                printf("File loaded\n");
+                printf("File successfully loaded.\n");
             }
             
             while (fgets(line, sizeof(line), input))
             {         
                 char date[11], time[6], steps[11];
                 tokeniseRecord(line, ",", date, time, steps);
-                recordCount++;
-            }
-            int minIndex = findFewestSteps(data, recordCount);
-            int maxIndex = findLargestSteps(data, recordCount);
-            int mean = meanSteps(data, recordCount);
-            break;
+                strcpy(data[recordCount].date, date);
+                strcpy(data[recordCount].time, time);
+                data[recordCount].steps = atoi(steps);
+
+                recordCount++;}
+                break;
+
+            
+                   
+                        
+                 
             case 'B':
                 printf("Total records: %d\n", recordCount);
                 break;
             case 'C':
+                minIndex = findFewestSteps(data, recordCount);
                 printf("Fewest Steps: %s %s\n", data[minIndex].date, data[minIndex].time);
                 break;
             case 'D':
+                maxIndex = findLargestSteps(data, recordCount);
                 printf("Largest steps: %s %s\n", data[maxIndex].date, data[maxIndex].time);
                 break;
             case 'E':
+                mean = meanSteps(data, recordCount);
                 printf("Mean step count: %d\n", mean);
                 break;
             case 'F':
-            Longestperiod(data, recordCount);
-            break;
+                Longestperiod(data, recordCount);
+                break;
             case 'Q':
-                printf("Exiting the program.\n");
                 return 0;
 
             default: 
