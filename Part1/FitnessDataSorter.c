@@ -28,40 +28,71 @@ void tokeniseRecord(char *record, char delimiter, char *date, char *time, int *s
 
 
 int main() {
-FitnessData data[MAX_RECORDS];
-char filename[100];   
-char line[100];
-int recordCount = 0;
 
-printf("Input filename: ");
-fgets(line, sizeof(line), stdin);
-sscanf(line, " %s ", filename);
-FILE *input = fopen(filename, "r");
-if (!input)
-{
-    printf("Error: Could not find or open the file.\n");
-    return 1;  }
+    FitnessData data[MAX_RECORDS]; 
+    char filename[100];
+    char line[100];
+    int recordCount = 0;
 
+    printf("Enter filename: ");
+    fgets(line, sizeof(line), stdin);
+    sscanf(line, " %s ", filename);
+    FILE *input = fopen(filename, "r");
 
-else {
-    printf("File successfully loaded.\n");
-}
+    if (!input) {
+        printf("Error:Inavali file\n");
+        return 1;
+    } 
 
-while (fgets(line, sizeof(line), input)) {
-    char date[11], time[6], steps[11];
-    tokeniseRecord(line, ",", date, time, steps);
-    strcpy(data[recordCount].date, date);
-    strcpy(data[recordCount].time, time);
-    data[recordCount].steps = atoi(steps);
+    // This checks if the is correctly formated
+    while (fgets(line, sizeof(line), input)) {
+        char date[11], time[6];
+        int steps;
+        if (sscanf(line, "%10[^,],%5[^,],%d", date, time, &steps) != 3) {
+            printf("Error: Invalid file\n");
+            fclose(input);
+            return 1;
+            }    }
 
-    recordCount++;
+    // Reset file pointer to the beginning of the file
+    fseek(input, 0, SEEK_SET);
+    while (fgets(line, sizeof(line), input)) {
+        char date[11], time[6];
+        int steps;
+        tokeniseRecord(line, ',', date, time, &steps);
+        strcpy(data[recordCount].date, date);
+        strcpy(data[recordCount].time, time);
+        data[recordCount].steps = steps;
 
-    if (sscanf(line, "%10[^,],%5[^,],%d", line, line, line) != 3) {
-        fprintf(stderr, "Invalid data type at line %d\n", recordCount);
-        fclose(filename);
-        return 1; // 120
+        recordCount++; }
+
+    // https://www.youtube.com/watch?v=YqzNgaFQEh8 // Bubble sort to order the data from most steps to lease
+    for (int i = 0; i < recordCount - 1; i++) {
+        for (int j = 0; j < recordCount - 1 - i; j++) {
+            if (data[j].steps < data[j + 1].steps) {
+                // Swap steps
+                int temp = data[j].steps;
+                data[j].steps = data[j + 1].steps;
+                data[j + 1].steps = temp;
             }
+        }
+    }
 
-}
+   
+    
+    // Wries on file name which adds '.tsv' at he end and stores sorted data
+    strcat(filename, ".tsv");
+    FILE *file = fopen(filename, "w");
+    if (file == NULL) 
+    {perror("");
+    return 1; }
+    for (int i = 0; i < recordCount; i++) {
+        fprintf(file, "%s\t%s\t%d\n", data[i].date, data[i].time, data[i].steps);
+    }
+ 
+    fclose(file);
+    return 0;
+
+       
 
 }
