@@ -40,7 +40,7 @@ int main() {
     FILE *input = fopen(filename, "r");
 
     if (!input) {
-        printf("Error:Inavali file\n");
+        printf("Error:Invalid file\n");
         return 1;
     } 
 
@@ -48,11 +48,18 @@ int main() {
     while (fgets(line, sizeof(line), input)) {
         char date[11], time[6];
         int steps;
-        if (sscanf(line, "%10[^,],%5[^,],%d", date, time, &steps) != 3) {
+        if (sscanf(line, "%10[^,],%5[^,],%d", date, time, &steps) != 3) 
+         {
             printf("Error: Invalid file\n");
             fclose(input);
             return 1;
-            }    }
+            }    
+        if (steps < 0) {
+        printf("Error: Invalid file\n");
+        fclose(input);
+        return 1; }   
+            }
+
 
     // Reset file pointer to the beginning of the file
     fseek(input, 0, SEEK_SET);
@@ -91,6 +98,7 @@ int main() {
     }
  
     fclose(file);
+    printf("Data sorted and written to %s\n", filename);
     return 0;
 
        
